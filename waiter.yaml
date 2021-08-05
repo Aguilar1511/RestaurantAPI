@@ -1,0 +1,229 @@
+
+openapi: 3.0.0
+info:
+  version: '3.0'
+  title: Restaurant
+  description: a repository of restaurant details
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/entlogics1111/restaurant/3.0
+
+
+paths:
+  /waiters:
+    get:
+      tags:
+      - waiter
+      summary: get waiters details
+      operationId: get_waiter
+      parameters:
+      - in: query
+        name: orderid
+        schema:
+          type: integer
+      - in: query
+        name: restaurant_id
+        schema:
+          type: integer
+        
+        
+        
+      responses:
+        '200':
+          description: successfully fetched details of waiters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    waiter_id:
+                      type: integer
+                      example: 1
+                    restaurant_id:
+                      type: integer
+                      example: 3
+                    waiter_name:
+                      type: string
+                      example: Rahul
+                    waiter_address:
+                      type: string
+                      example: turner road, kozhikode
+                    waiterphoneno:
+                      type: integer
+                      example: '8126145678'
+                    waiter_salary:
+                      type: integer
+                      example: 19000
+        '404':
+          description: page not found
+          
+    post:
+      tags:
+      - waiter
+      summary: creating an waiter
+      operationId: create_waiter
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    waiter_name:
+                      type: string
+                      example: shyam
+                    waiter_address:
+                      type: string
+                      example:  nehru marg, delhi
+                    waiter_contact_number:
+                      type: number
+                      example: 9897654897
+                    waiter_salary:
+                      type: integer
+                      example: 15000
+                      
+      responses:
+          '201':
+            description: succesfully created a waiter
+            
+            
+            
+  /waiters/{waiter_id}:
+    get:
+      tags:
+        - waiter
+      summary: getting details of a waiter
+      operationId: get_waiterdetails
+      parameters:
+        - in: path
+          name: waiter_id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved details of a waiter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waiters'
+                
+    put:
+      tags:
+      - waiter
+      summary: updating a waiter
+      operationId: edit_waiter
+      parameters:
+      - in:  path
+        name: waiter_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    waiter_name:
+                      type: string
+                      example: kartikey
+                    waiter_address:
+                      type: string
+                      example:  a-102 barakhamba road,mumbai
+                    waiter_contact_number:
+                      type: number
+                      example: 7896897901
+                    waiter_salary:
+                      type: integer
+                      example: 18000
+                    
+      responses:
+        '204':
+          description: succesfully updated a waiter details
+    
+    
+  /waiters/{waiter_id}/orders:
+    get:
+      tags:
+        - waiter
+      summary: listing orders served by a waiter
+      operationId: get_waiters_orders
+      parameters:
+        - in: path
+          name: waiter_id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved orders of a waiter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waiter_id-orders'
+                
+components:
+            schemas:
+                    waiters :
+                      type: object
+                      properties:
+                        restaurant_id:
+                          type: integer
+                          example: 1
+                        waiter_id : 
+                          type : integer
+                          example : 1
+                        waiter_name :
+                          type : string
+                          example : Donald
+                        waiter_address : 
+                          type : string
+                          example : 201-d greenview lane, ohio
+                        waiter_contact_number :
+                          type : number
+                          example : 8978909783
+                        waiter_salary:
+                          type : integer
+                          example : 21000
+                                
+                    waiter_id-orders :
+                      type: object
+                      properties:
+                        waiter_id:
+                          type: integer
+                          example : 1
+                        waiter_name:
+                          type: string
+                          example : shivam
+                        orders:
+                          type: array
+                          items:
+                            properties:
+                              order_id: 
+                                type: integer
+                                example : 1
+                              order_date:
+                                type: string
+                                format: date
+                                example: '2021-07-22'
+                              order_value:
+                                type: integer
+                                example : 1850
+                              dishes:
+                               type: array
+                               items:
+                                properties:
+                                  dish_id:
+                                    type: integer
+                                    example: 1
+                                  dish_name:
+                                    type: string
+                                    example: "oreo shake"
