@@ -1,0 +1,1373 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: shivam@entlogics.com
+  version: '3.0'
+  title: Restaurant
+  description: a repository of restaurant details
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/entlogics1111/restaurant/3.0'
+tags:
+  - name: customer
+    description: All operations related to customers
+  - name: order
+    description: all things related to orders
+  - name: waiter
+    description: all operations related to waiters
+  - name: restaurant
+    description: all operations related to restaurants
+  - name: dish
+    description: all operations related to dish
+paths:
+  /customers:
+    get:
+      description: http method to get info about customers
+      tags:
+        - customer
+      summary: listing all customers
+      operationId: list_all_customers
+      responses:
+        '200':
+          description: successfully listed all the customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    customer_id:
+                      type: integer
+                      example: 1
+                    customer_name:
+                      type: string
+                      example: John
+                    customer_address:
+                      type: string
+                      example: 'arya nagar, delhi'
+                    customer_email:
+                      type: string
+                      example: burgerking02@co.in
+                    customer_contact_number:
+                      type: number
+                      example: 7654378211
+        '404':
+          description: Page not found
+    post:
+      description: http method to create a customer resource on the server
+      tags:
+        - customer
+      summary: creating a customer
+      operationId: create_customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_name:
+                  type: string
+                  example: Shivam
+                customer_address:
+                  type: string
+                  example: 'doonshire aptmnts, dehradun'
+                customer_email:
+                  type: string
+                  format: email
+                  example: shivam1@gmail.com
+                customer_contact_ number:
+                  type: number
+                  example: 7009430636
+      responses:
+        '201':
+          description: succesfully created a customer
+  /customers/{customer_id}:
+    get:
+      description: http method to get info about customer
+      tags:
+        - customer
+      summary: getting details of a customer
+      operationId: get_customerdetails
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved details of a customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customers'
+    put:
+      description: http method to update a resource on the server 
+      tags:
+        - customer
+      summary: updating a customer
+      operationId: edit_customer
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_name:
+                  type: string
+                  example: shivam
+                customer_address:
+                  type: string
+                  example: 'gms road,dehradun'
+                customer_email:
+                  type: string
+                  format: email
+                  example: shivam123@co.in
+                customer_contact_number:
+                  type: number
+                  example: 7009430646
+      responses:
+        '204':
+          description: succesfully updated customer details
+  /customers/{customer_id}/restaurants:
+    get:
+      description: http method to fetch details of a customer and the restaurants he/she visits
+      tags:
+        - customer
+      summary: getting list of restaurants visited by a customer
+      operationId: get_restaurantcustomer
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: succesfully retrieved customers in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_id-restaurants'
+  /customers/{customer_id}/orders:
+    get:
+      description: http method to get details of orders placed by a customer
+      tags:
+        - customer
+      summary: getting list of orders placed by a customer
+      operationId: get_customerorders
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved orders of a customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_id-orders'
+  /orders:
+    get:
+      description: http method to get info about orders
+      tags:
+        - order
+      summary: listing all orders
+      operationId: get_orders
+      responses:
+        '200':
+          description: listed all orders successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    customer_id:
+                      type: integer
+                      example: 2
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    order_id:
+                      type: integer
+                      example: 1
+                    order_date:
+                      type: string
+                      format: date
+                      example: '2021-07-28'
+                    order_value:
+                      type: integer
+                      format: double
+                      example: 1000
+                    order_items:
+                      type: array
+                      items:
+                        properties:
+                          dish_id:
+                            type: integer
+                            example: 1
+                          price:
+                            type: integer
+                            example: 200
+                          quantity:
+                            type: integer
+                            example: 5
+        '404':
+          description: page not found
+    post:
+      description: http method to create a order resource on the server
+      tags:
+        - order
+      summary: creating an order
+      operationId: create_order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                  example: 1
+                restaurant_id:
+                  type: integer
+                  example: 1
+                order_date:
+                  type: string
+                  format: date
+                  example: '2021-07-29'
+                order_value:
+                  type: integer
+                  example: 1580
+                order_status:
+                  type: string
+                  example: initiated
+                order_items:
+                  type: array
+                  items:
+                    properties:
+                      dish_id:
+                        type: integer
+                        example: 1
+                      dish_name:
+                        type: string
+                        example: pasta
+                      dish_description:
+                        type: string
+                        example: an italian dish
+      responses:
+        '201':
+          description: Order succesfully created
+  '/orders/{order_id}':
+    get:
+      description: http method to get details of a particular order
+      tags:
+        - order
+      summary: get details of an order
+      operationId: get_order
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successfully fetched the details of an order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orders-order_id'
+    put:
+      description: http method to modify details of a order resource
+      tags:
+        - order
+      summary: update the details of an order
+      operationId: update_order
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: integer
+                  example: 4
+                order_date:
+                  type: string
+                  format: date
+                  example: '2021-07-30'
+                order_value:
+                  type: integer
+                  example: 1583
+                dish:
+                  type: array
+                  items:
+                    properties:
+                      dish_id:
+                        type: integer
+                        example: 1
+                      quantity:
+                        type: integer
+                        example: 3
+      responses:
+        '204':
+          description: successfully updated an order
+  /orders/{order_id}/dishes:
+    get:
+      description: http method to get info about dish details in an order 
+      tags:
+        - order
+      summary: fetching the dish details in an order
+      operationId: get_order_dish
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successfully fetched the dish details in an order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_id-dishes'
+  /waiters:
+    get:
+      description: http method to get info about waiters
+      tags:
+        - waiter
+      summary: get waiters details
+      operationId: get_waiter
+      parameters:
+        - in: query
+          name: orderid
+          schema:
+            type: integer
+        - in: query
+          name: restaurant_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successfully fetched details of waiters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    waiter_id:
+                      type: integer
+                      example: 1
+                    restaurant_id:
+                      type: integer
+                      example: 3
+                    waiter_name:
+                      type: string
+                      example: Rahul
+                    waiter_address:
+                      type: string
+                      example: 'turner road, kozhikode'
+                    waiter_contact_number:
+                      type: number
+                      example: 8126145678
+                    waiter_salary:
+                      type: integer
+                      example: 19000
+        '404':
+          description: page not found
+    post:
+      description: http method to create a waiter on the server
+      tags:
+        - waiter
+      summary: creating an waiter
+      operationId: create_waiter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_id:
+                  type: integer
+                  example: 1
+                waiter_name:
+                  type: string
+                  example: shyam
+                waiter_address:
+                  type: string
+                  example: 'nehru marg, delhi'
+                waiter_contact_number:
+                  type: number
+                  example: 9897654897
+                waiter_salary:
+                  type: integer
+                  example: 15000
+      responses:
+        '201':
+          description: succesfully created a waiter
+  /waiters/{waiter_id}:
+    get:
+      description: http method to get info about a particular waiter
+      tags:
+        - waiter
+      summary: getting details of a waiter
+      operationId: get_waiterdetails
+      parameters:
+        - in: path
+          name: waiter_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved details of a waiter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waiters'
+    put:
+      description: http method to modify details of a waiter
+      tags:
+        - waiter
+      summary: updating a waiter
+      operationId: edit_waiter
+      parameters:
+        - in: path
+          name: waiter_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                waiter_name:
+                  type: string
+                  example: kartikey
+                waiter_address:
+                  type: string
+                  example: 'a-102 barakhamba road,mumbai'
+                waiter_contact_number:
+                  type: number
+                  example: 7896897901
+                waiter_salary:
+                  type: integer
+                  example: 18000
+      responses:
+        '204':
+          description: succesfully updated a waiter details
+  /waiters/{waiter_id}/orders:
+    get:
+      description: http method to get orders served by a waiter
+      tags:
+        - waiter
+      summary: listing orders served by a waiter
+      operationId: get_waiters_orders
+      parameters:
+        - in: path
+          name: waiter_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved orders of a waiter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waiter_id-orders'
+  /restaurants:
+    get:
+      description: http method to get info about all restaurants
+      tags:
+        - restaurant
+      summary: list of all restaurants
+      operationId: list_all_restaurants
+      responses:
+        '200':
+          description: successfully listed all the restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    restaurant_name:
+                      type: string
+                      example: burger king
+                    restaurant_address:
+                      type: string
+                      example: 'arya nagar, delhi'
+                    restaurant_email:
+                      type: string
+                      example: burgerking02@co.in
+                    restaurant_contact_number:
+                      example: 2248575461
+        '404':
+          description: Page not found
+    post:
+      description: http method to create a restaurant resource on the server
+      tags:
+        - restaurant
+      summary: creating a restaurant
+      operationId: create_restaurant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_name:
+                  type: string
+                  example: Mamagoto
+                restaurant_address:
+                  type: string
+                  example: 'kichi nishigogi,Tokyo'
+                restaurant_email:
+                  type: string
+                  format: email
+                  example: mamagoto01@co.in
+                restaurant_contact_number:
+                  type: number
+                  example: 9897456782
+      responses:
+        '201':
+          description: succesfully created a restaurant
+  /restaurants/{restaurant_id}:
+    get:
+      description: http method to get info about customers
+      tags:
+        - restaurant
+      summary: getting details of a restaurant
+      operationId: get_restaurant
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved details of a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurants'
+    put:
+      description: http method to modify details of a restaurant
+      tags:
+        - restaurant
+      summary: updating an restaurant
+      operationId: edit_restaurant
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_name:
+                  type: string
+                  example: cle chef
+                restaurant_address:
+                  type: string
+                  example: 'rajpur road,dehradun'
+                restaurant_email:
+                  type: string
+                  format: email
+                  example: clechef03@co.in
+                restaurant_contact_number:
+                  type: number
+                  example: 7896453458
+      responses:
+        '204':
+          description: succesfully updated a restaurant details
+  /restaurants/{restaurant_id}/customers:
+    get:
+      description: http method to get info about customers visiting a particular restaurant
+      tags:
+        - restaurant
+      summary: getting list of customers in a restaurant
+      operationId: get_restaurant_customers
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: customer_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved customers in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurants-customer'
+  /restaurants/{restaurant_id}/waiters:
+    get:
+      description: http method to get all waiters serving in a restaurant
+      tags:
+        - restaurant
+      summary: getting list of waiters in a restaurant
+      operationId: get_restaurant_waiters
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: waiter_id
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: succesfully retrieved customers in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurants-waiters'
+  /restaurants/{restaurant_id}/dishes:
+    get:
+      description: http method to get info about dishes served in a restaurant
+      tags:
+        - restaurant
+      summary: getting list of dishes in a restaurant
+      operationId: get_restaurant_dishes
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved dishes in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurant_id-dishes'
+    post:
+      description: http method to create a dish in a particular restaurant
+      tags:
+        - restaurant
+      summary: Add dishes for a restaurant
+      operationId: add_dish_restaurant
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dishname:
+                  type: string
+                  example: momos
+                dishdescription:
+                  type: string
+                  example: steamed dumplings
+                price:
+                  type: integer
+                  example: 90
+      responses:
+        '201':
+          description: successful operation
+  /restaurants/{restaurant_id}/orders:
+    get:
+      description: http method to get info about orders placed in a restaurant
+      tags:
+        - restaurant
+      summary: getting list of orders in a restaurant
+      operationId: get_restaurant_orders
+      parameters:
+        - in: path
+          name: restaurant_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: customer_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved orders in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurants-orders'
+  /dishes:
+    get:
+      description: http method to get info about all dishes
+      tags:
+        - dish
+      summary: getting  all dish details
+      operationId: get_dishes
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    order_ id:
+                      type: integer
+                      example: 1
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: Margherita
+                    dish_description:
+                      type: string
+                      example: loaded with cheese
+        '404':
+          description: page not found
+    post:
+      description: http method to create a dish resource
+      tags:
+        - dish
+      summary: creating a new dish
+      operationId: create_dish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish_name:
+                  type: string
+                  example: veg burger
+                dish_description:
+                  type: string
+                  example: fried bean patty dressed in sauces
+      responses:
+        '201':
+          description: created dish successfully
+  /dishes/{dish_id}:
+    get:
+      description: http method to details of a particular dish
+      tags:
+        - dish
+      summary: get details of a dish
+      operationId: get_dish
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successfully fetched the details of a dish
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dishes'
+    put:
+      description: http method to modify details of a dish
+      tags:
+        - dish
+      summary: updating a dish
+      operationId: edit_dish
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish_name:
+                  type: string
+                  example: noodles
+                dish_desciption:
+                  type: string
+                  example: chinese delicacy
+                price:
+                  type: integer
+                  example: 110
+      responses:
+        '204':
+          description: updated successfully
+  /dishes/{dish_id}/restaurants:
+    get:
+      description: http method to get all resturants serving a particular dish
+      tags:
+        - dish
+      summary: list of restaurants serving a particular dish
+      operationId: get_dish_restaurant
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: succesfully retrieved restaurants serving a dish
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dish_id-restaurant'
+    post:
+      description: http method to post a dish in a particular restaurant
+      tags:
+        - dish
+      summary: posting dishes in a restaurant
+      operationId: post_dish_restaurant
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  restaurant_id:
+                    type: integer
+                    example: 1
+                  price:
+                    type: integer
+                    example: 90
+                  discount:
+                    type: integer
+                    example: 10
+      responses:
+        '201':
+          description: succesfully created dish in a restaurant
+  /dishes/{dish_id}/orders:
+    get:
+      description: http method to get all orders containg a particular dish
+      tags:
+        - dish
+      summary: details of order containing a particular dish
+      operationId: get_dish_orders
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operaton
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dish_id-orders'
+components:
+  schemas:
+    customers:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          example: 1
+        customer_name:
+          type: string
+          example: kenny
+        customer_address:
+          type: string
+          example: '101-b baker street, london'
+        customer_email:
+          type: string
+          format: email
+          example: kenny101@gmail.com
+        customer_contact_number:
+          type: number
+          example: 7009430636
+        restaurants:
+          type: array
+          items:
+            properties:
+              restaurant_id:
+                type: integer
+                example: 1
+              restaurant_name:
+                type: string
+                example: The Wok
+        orders:
+          type: array
+          items:
+            properties:
+              order_id:
+                type: integer
+                example: 1
+              order_date:
+                type: string
+                format: date
+                example: '2021-08-02'
+              order_value:
+                type: integer
+                example: 1600
+    customer_id-restaurants:
+      type: array
+      items:
+        properties:
+          customer_id:
+            type: integer
+            example: 1
+          customer_name:
+            type: string
+            example: yohan
+          restaurants:
+            type: array
+            items:
+              properties:
+                restaurant_id:
+                  type: integer
+                  example: 1
+                restaurant_name:
+                  type: string
+                  example: kailin
+                restaurant_contact_number:
+                  type: number
+                  example: 70333555777
+    customer_id-orders:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          example: 1
+        customer_name:
+          type: string
+          example: rebecca
+        orders:
+          type: array
+          items:
+            properties:
+              restaurant_id:
+                type: integer
+                example: 1
+              order_id:
+                type: integer
+                example: 1
+              order_date:
+                type: string
+                format: date
+                nullable: true
+                example: '2021-07-28'
+              order_value:
+                type: integer
+                example: 1750
+    orders-order_id:
+      type: object
+      properties:
+        order_id:
+          type: integer
+          example: 1
+        order_date:
+          type: string
+          format: date
+          example: '2021-07-31'
+        order_value:
+          type: integer
+          example: 1800
+        customer_id:
+          type: integer
+          example: 1
+        restaurant_id:
+          type: integer
+          example: 1
+        order_items:
+          type: array
+          items:
+            properties:
+              dish_id:
+                type: integer
+                example: 1
+              dish_name:
+                type: string
+                example: chocolate shake
+    order_id-dishes:
+      type: object
+      properties:
+        order_id:
+          type: integer
+          example: 1
+        order_date:
+          type: string
+          format: date
+          example: '2021-07-20'
+        order_value:
+          type: integer
+          example: 1800
+        customer_id:
+          type: integer
+          example: 1
+        restaurant_id:
+          type: integer
+          example: 1
+        dish:
+          type: array
+          items:
+            properties:
+              dish_id:
+                type: integer
+                example: 1
+              dish_name:
+                type: string
+                example: pizza
+              dish_description:
+                type: string
+                example: an italian delicacy
+              quantity:
+                type: integer
+                example: 6
+              amount:
+                type: integer
+                example: 300
+    waiters:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 1
+        waiter_id:
+          type: integer
+          example: 1
+        waiter_name:
+          type: string
+          example: Donald
+        waiter_address:
+          type: string
+          example: '201-d greenview lane, ohio'
+        waiter_contact_number:
+          type: number
+          example: 8978909783
+        waiter_salary:
+          type: integer
+          example: 21000
+    waiter_id-orders:
+      type: object
+      properties:
+        waiter_id:
+          type: integer
+          example: 1
+        waiter_name:
+          type: string
+          example: shivam
+        orders:
+          type: array
+          items:
+            properties:
+              order_id:
+                type: integer
+                example: 1
+              order_date:
+                type: string
+                format: date
+                example: '2021-07-22'
+              order_value:
+                type: integer
+                example: 1850
+              dishes:
+                type: array
+                items:
+                  properties:
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: oreo shake
+    restaurants:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 1
+        restaurant_name:
+          type: string
+          example: burger king
+        restaurant_address:
+          type: string
+          example: 'c-101 shastri marg, delhi'
+        restaurant_email:
+          type: string
+          example: burgerking04@co.in
+        restaurant_contact_number:
+          type: integer
+          example: 9002001500
+        customers:
+          type: array
+          items:
+            properties:
+              customer_id:
+                type: integer
+                example: 1
+              customer_name:
+                type: string
+                example: Catherine
+        orders:
+          type: array
+          items:
+            properties:
+              order_id:
+                type: integer
+                example: 1
+              order_date:
+                type: string
+                format: date
+                example: '2021-07-26'
+              order_status:
+                type: string
+                example: completed
+        dishes:
+          type: array
+          items:
+            properties:
+              dish_id:
+                type: integer
+                example: 1
+              dish_name:
+                type: string
+                example: french fries
+              dish_description:
+                type: string
+                example: potato fingers
+              price:
+                type: integer
+                example: 100
+              discount:
+                type: integer
+                example: 10
+    restaurants-customer:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 1
+        restaurant_name:
+          type: string
+          example: Dominos
+        customers:
+          type: array
+          items:
+            properties:
+              customer_id:
+                type: integer
+                example: 1
+              customer_name:
+                type: string
+                example: Ryan
+              customer_type:
+                type: string
+                example: gold
+              no_of_visits:
+                type: integer
+                example: 55
+              amount_spent:
+                type: integer
+                example: 65000
+    restaurants-waiters:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 2
+        restaurant_name:
+          type: string
+          example: The rice bowl
+        waiters:
+          type: array
+          items:
+            properties:
+              waiter_id:
+                type: integer
+                example: 2
+              waiter_name:
+                type: string
+                example: Paul
+              waiter_contact_number:
+                type: number
+                example: 7896547821
+              waiter_salary:
+                type: integer
+                example: 21000
+    restaurant_id-dishes:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 3
+        restaurant_name:
+          type: string
+          example: Shaolin
+        dishes:
+          type: array
+          items:
+            properties:
+              dish_id:
+                type: integer
+                example: 1
+              dish_name:
+                type: string
+                example: Thukpa
+              price:
+                type: integer
+                example: 1200
+              discount:
+                type: integer
+                example: 10
+    restaurants-orders:
+      type: object
+      properties:
+        restaurant_id:
+          type: integer
+          example: 1
+        restaurant_name:
+          type: string
+          example: Pizza hut
+        orders:
+          type: array
+          items:
+            properties:
+              customer_id:
+                type: integer
+                example: 1
+              order_id:
+                type: integer
+                example: 1
+              order_date:
+                type: string
+                format: date
+                example: '2021-07-27'
+              order_value:
+                type: integer
+                example: 1500
+              order_status:
+                type: string
+                example: completed
+    dishes:
+      type: object
+      properties:
+        dish_id:
+          type: integer
+          example: 1
+        dish_name:
+          type: string
+          example: pastry
+        dish_description:
+          type: string
+          example: bakery product
+        price:
+          type: integer
+          example: 60
+    dish_id-restaurant:
+      type: object
+      properties:
+        dish_id:
+          type: integer
+          example: 1
+        dish_name:
+          type: string
+          example: momos
+        restaurant:
+          type: array
+          items:
+            properties:
+              restaurant_id:
+                type: integer
+                example: 1
+              restaurant_name:
+                type: string
+                example: kalsang
+              price:
+                type: integer
+                example: 80
+              discount:
+                type: integer
+                example: 10
+    dish_id-orders:
+      type: object
+      properties:
+        dish_id:
+          type: integer
+          example: 1
+        dish_name:
+          type: string
+          example: virgin mojito
+        dish_description:
+          type: string
+          example: fizzy lemon refreshing drink
+        orders:
+          type: array
+          items:
+            properties:
+              order_id:
+                type: integer
+                example: 3
+              order_date:
+                type: string
+                format: date
+                example: '2021-08-01'
+              quantity:
+                type: integer
+                example: 3
+              amount:
+                type: integer
+                example: 240
