@@ -1,0 +1,281 @@
+
+openapi: 3.0.0
+info:
+  version: '3.0'
+  title: Restaurant
+  description: a repository of restaurant details
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/entlogics1111/restaurant/3.0
+paths:
+  /customers:
+    get:
+      tags:
+      - customer
+      summary: listing all customers
+      operationId: list_all_customers
+      responses:
+        '200':
+          description: successfully listed all the customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    customer_id:
+                      type: integer
+                      example: 1
+                    customer_name:
+                      type: string
+                      example: John
+                    customer_address:
+                      type: string
+                      example: arya nagar, delhi
+                    customer_email:
+                      type: string
+                      example: burgerking02@co.in
+                    customer_contact_number:
+                      type: number
+                      example: 7654378211
+        '404':
+          description: Page not found
+          
+        
+    post:
+      tags:
+        - customer
+      summary: creating a customer
+      operationId: create_customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_name:
+                  type: string
+                  example: Shivam
+                customer_address:
+                  type: string
+                  example: doonshire aptmnts, dehradun
+                customer_email:
+                  type: string
+                  format: email
+                  example: shivam1@gmail.com
+                customer_contact_ number:
+                  type: number
+                  minimum: 0
+                  maximum: 13
+                  example: 7009430636
+                    
+      responses:
+        '201':
+          description: succesfully created a customer
+          
+          
+  /customers/{customer_id}:
+    get:
+      tags:
+        - customer
+      summary: getting details of a customer
+      operationId: get_customerdetails
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved details of a customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customers'
+                
+                
+    put:
+      tags:
+      - customer
+      summary: updating a customer
+      operationId: edit_customer
+      parameters:
+      - in:  path
+        name: customer_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    customer_name:
+                      type: string
+                      example: shivam
+                    customer_address:
+                      type: string
+                      example: gms road,dehradun
+                    customer_email:
+                      type: string
+                      format: email
+                      example: shivam123@co.in
+                    customer_contact_number:
+                      type: number
+                      minimum: 0
+                      maximum: 13
+                      example: 7009430646
+                    
+      responses:
+        '204':
+          description: succesfully updated customer details
+          
+          
+  /customers/{customer_id}/restaurants:
+    get:
+      tags:
+      - customer
+      summary: getting list of restaurants visited by a customer
+      operationId: get_restaurantcustomer
+      parameters:
+      - in: path
+        name: customer_id
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved customers in a restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_id-restaurants'
+  
+  /customers/{customer_id}/orders:
+   get:
+      tags:
+      - customer
+      summary: getting list of orders placed by a customer
+      operationId: get_customerorders
+      parameters:
+      - in: path
+        name: customer_id
+        required: true
+        schema:
+          type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved orders of a customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer_id-orders'
+
+components:
+            schemas:
+                customers :
+                      type: object
+                      properties:
+                        customer_id:
+                          type: integer
+                          example : 1
+                        customer_name:
+                          type: string
+                          example : kenny
+                        customer_address:
+                          type: string
+                          example: 101-b baker street, london
+                        customer_email:
+                          type: string
+                          format: email
+                          example: kenny101@gmail.com
+                        customer_contact_number:
+                          type: number
+                          example: 7009430636
+                        restaurants:
+                          type: array
+                          items:
+                            properties:
+                              restaurant_id:
+                                type: integer
+                                example: 1
+                              restaurant_name:
+                                type: string
+                                example: The Wok
+                        
+                        orders:
+                                type: array
+                                items:
+                                 properties:
+                                  order_id:
+                                    type: integer
+                                    example: 1
+                                  order_date:
+                                    type: string
+                                    format: date
+                                    example: '2021-08-02'
+                                  order_value:
+                                    type: string
+                                    example: 1600
+                                    
+                                  
+                                  
+                customer_id-restaurants :
+                      type: array
+                      items:
+                        properties:
+                          customer_id:
+                            type: integer
+                            example : 1
+                          customer_name:
+                            type: string
+                            example : yohan
+                          restaurants:
+                            type: array
+                            items:
+                              properties:
+                                restaurant_id: 
+                                  type: integer
+                                  example : 1
+                                restaurant_name:
+                                  type: string
+                                  example : kailin
+                                restaurant_contact_number:
+                                  type: number
+                                  example: 70333555777
+                customer_id-orders:
+                      type: object
+                      properties:
+                        customer_id:
+                          type: integer
+                          example : 1
+                        customer_name:
+                          type: string
+                          example : rebecca
+                        orders:
+                          type: array
+                          items:
+                            properties:
+                              restaurant_id:
+                                type: integer
+                                example: 1
+                              order_id: 
+                                type: integer
+                                example : 1
+                              order_date:
+                                type: string
+                                format: date
+                                nullable: true
+                                example : '2021-07-28'
+                              order_value:
+                                type: integer
+                                example: 1750
