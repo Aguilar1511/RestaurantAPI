@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  version: '3.0'
+  title: Restaurant
+  description: a repository of restaurant details
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/entlogics1111/restaurant/3.0
+
+paths:
+  /dishes:
+    get:
+      tags:
+      - dish
+      summary: getting  all dish details
+      operationId: get_dishes
+      responses:
+        '200':
+          description: successfull operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items :
+                  properties:
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    order_ id:
+                     type: integer
+                     example: 1
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: Margherita  
+                    dish_description:
+                      type: string
+                      example: loaded with cheese
+        '404':
+          description: page not found
+          
+    post:
+      tags:
+      - dish
+      summary: creating a new dish
+      operationId: create_dish
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    dish_name:
+                      type: string
+                      example: veg burger
+                    dish_description:
+                      type: string
+                      example: fried bean patty dressed in sauces
+                    
+                      
+      responses:
+        '201' :
+          description: created dish successfully
+          
+  /dishes/{dish_id}:
+    get:
+      tags:
+      - dish
+      summary: get details of a dish
+      operationId: get_dish
+      parameters:
+      - in: path
+        name: dish_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successfully fetched the details of a dish
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dishes'
+                
+    put:
+      tags:
+      - dish
+      summary: updating a dish
+      operationId: edit_dish
+      parameters:
+      - in:  path
+        name: dish_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    dish_name:
+                      type: string
+                      example: noodles
+                    dish_desciption:
+                      type: string
+                      example: chinese delicacy
+                    price:
+                      type: integer
+                      example: 110
+                      
+      responses:
+        '204':
+          description: updated successfully
+          
+          
+  /dishes/{dish_id}/restaurants:
+    get:
+      tags:
+        - dish
+      summary: list of restaurants serving a particular dish
+      operationId: get_dish_restaurant
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: succesfully retrieved restaurants serving a dish
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dish_id-restaurant'
+                
+    post:
+      tags:
+        - dish
+      summary: posting dishes in a restaurant
+      operationId: post_dish_restaurant
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                   properties:
+                    restaurant_id:
+                      type: string
+                      example: 1
+                    price:
+                      type: integer
+                      example: 90
+                    discount:
+                     type: integer
+                     example: 10
+                 
+            
+            
+      responses:
+        '201':
+          description: succesfully created dish in a restaurant
+          
+    
+              
+  /dishes/{dish_id}/orders:
+    get:
+      tags:
+        - dish
+      summary: details of order containing a particular dish
+      operationId: get_dish_orders
+      parameters:
+        - in: path
+          name: dish_id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '200':
+          description: successful operaton
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/dish_id-orders'
+                
+
+components:
+          schemas:
+                dishes:
+                  type : object
+                  properties:
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: pastry
+                    dish_description:
+                      type: string
+                      example: bakery product
+                    price:
+                      type: integer
+                      example: 60
+                dish_id-restaurant:
+                  type: object
+                  properties:
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: momos
+                    restaurant:
+                      type: array
+                      items:
+                        properties:
+                          restaurant_id:
+                            type: integer
+                            example: 1
+                          restaurant_name:
+                            type: string
+                            example: kalsang
+                          price:
+                            type: integer
+                            example: 80
+                          discount:
+                            type: integer
+                            example: 10
+                
+                dish_id-orders:
+                  type: object
+                  properties:
+                    dish_id:
+                      type: integer
+                      example: 1
+                    dish_name:
+                      type: string
+                      example: virgin mojito
+                    dish_description:
+                      type: string
+                      example: fizzy lemon refreshing drink
+                    orders:
+                      type: array
+                      items:
+                        properties:
+                          order_id:
+                            type: integer
+                            example: 3
+                          order_date:
+                            type: string
+                            format: date
+                            example: '2021-08-01'
+                          quantity:
+                            type: integer
+                            example: 3
+                          amount:
+                            type: integer
+                            example: 240

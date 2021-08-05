@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  version: '3.0'
+  title: Restaurant
+  description: a repository of restaurant details
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/entlogics1111/restaurant/3.0
+    
+paths:
+  /orders:
+    get:
+      tags:
+      - order
+      summary: listing all orders
+      operationId: get_orders
+      responses:
+        '200':
+          description: listed all orders successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    customer_id:
+                      type: integer
+                      example: 2
+                    restaurant_id:
+                      type: integer
+                      example: 1
+                    order_id:
+                      type: integer
+                      example: 1
+                    order_date:
+                      type: string
+                      format: date
+                      example: '2021-07-28'
+                    order_value:
+                      type: integer
+                      format: double
+                      example: 1000
+                    order_items:
+                      type: array
+                      items:
+                        properties:
+                          dish_id:
+                           type: integer
+                           example: 1
+                          price:
+                            type: integer
+                            example: 200
+                          quantity:
+                            type: integer
+                            example: 5
+                    
+        '404':
+          description: page not found
+          
+    post:
+      tags:
+      - order
+      summary: creating an order
+      operationId: create_order
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    customer_id:
+                      type: integer
+                      example: 1
+                    restaurant_id:
+                      type : integer
+                      example: 1
+                    order_date:
+                      type: integer
+                      format: date
+                      example: '2021-07-29'
+                    order_value:
+                      type: integer
+                      example: 1580
+                    order_status:
+                      type: string
+                      example: initiated
+                    order_items:
+                      type: array
+                      items:
+                        properties:
+                          dish_id:
+                            type: integer
+                            example: 1
+                          dish_name:
+                            type: string
+                            example: pasta
+                          dish_description:
+                            type: string
+                            example: an italian dish
+                      
+                      
+      responses:                
+       '201':
+          description: Order succesfully created
+          
+  /orders/{order_id}:
+    get:
+      tags:
+      - order
+      summary: get details of an order
+      operationId: get_order
+      parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successfully fetched the details of an order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orders-order_id'
+                
+    put:
+      tags:
+      - order
+      summary: update the details of an order
+      operationId: update_order
+      parameters:
+      - in : path
+        name: order_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: integer
+                  example: 4
+                order_date:
+                  type: integer
+                  format: date
+                  example: '2021-07-30'
+                order_value:
+                  type: integer
+                  format: double
+                  example: 1583.20
+                dish:
+                  type: array
+                  items:
+                    properties:
+                      dish_id:
+                        type: integer
+                        example: 1
+                      quantity:
+                        type: integer
+                        example: 3
+                        
+      responses:
+        '204' :
+          description: successfully updated an order
+          
+  /orders/{order_id}/dishes:
+    get:
+      tags:
+      - order
+      summary: fetching the dish details in an order 
+      operationId: get_order_dish
+      parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          type: integer
+          
+      responses:
+        '200':
+          description: successfully fetched the dish details in an order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_id-dishes'
+                
+components:
+           schemas:
+                  orders-order_id:
+                        type: object
+                        properties:
+                          order_id:
+                            type: integer
+                            example : 1
+                          order_date:
+                            type: string
+                            format: date
+                            example: '2021-07-31'
+                          order_value:
+                            type: integer
+                            example: 1800
+                          customer_id:
+                            type: integer
+                            example: 1
+                          restaurant_id:
+                            type: integer
+                            example: 1
+                          order_items:
+                            type: array
+                            items:
+                              properties:
+                                dish_id:
+                                  type: integer
+                                  example: 1
+                                dish_name:
+                                  type: string
+                                  example: "chocolate shake"
+                                  
+                          
+                              
+        
+                                   
+                  order_id-dishes:
+                      type: object
+                      properties:
+                        order_id:
+                          type: integer
+                          example : 1
+                        order_date:
+                          type: integer
+                          format: date
+                          example: '2021-07-20'
+                        order_value:
+                          type: integer
+                          example: 1800
+                        customer_id:
+                          type: integer
+                          example: 1
+                        restaurant_id:
+                          type: integer
+                          example: 1
+                        dish:
+                          type: array
+                          items:
+                            properties:
+                              dish_id: 
+                                type: integer
+                                example : 1
+                              dish_name:
+                                type: string
+                                example : "pizza"
+                              dish_description:
+                                type: string
+                                example: "an italian delicacy"
+                              quantity:
+                                type: integer
+                                example: 6
+                              amount: 
+                                type: integer
+                                example: 300
